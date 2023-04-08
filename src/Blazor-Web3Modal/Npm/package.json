@@ -1,0 +1,23 @@
+{
+  "name": "npm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild ./src/js/index.js --outfile=../wwwroot/index.bundle.js --bundle --minify --format=esm",
+    "buildDebug": "esbuild ./src/js/index.js --outfile=../wwwroot/index.bundle.js --bundle --sourcemap --format=esm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.17.14",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "@wagmi/core": "^0.10.7",
+    "@web3modal/ethereum": "^2.2.2",
+    "@web3modal/html": "^2.2.2"
+  }
+}

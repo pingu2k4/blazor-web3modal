@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Blazor_Web3Modal</RootNamespace>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.4" />
+    <PackageReference Include="Nethereum.Contracts" Version="4.14.0" />
+    <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
+  </ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="npm install" WorkingDirectory="Npm" />
+		<Exec Command="npm run buildDebug" WorkingDirectory="Npm" Condition="'$(Configuration)' == 'Debug'" />
+		<Exec Command="npm run build" WorkingDirectory="Npm" Condition="'$(Configuration)' == 'Release'" />
+	</Target>
+
+</Project>

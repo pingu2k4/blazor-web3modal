@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor-Web3Modal", "Blazor-Web3Modal.csproj", "{9B5492A3-FC8F-4C61-B893-9D19EFE8F7D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "..\Example\Example.csproj", "{8F83B920-2F2D-402A-921E-C9646334165D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B5492A3-FC8F-4C61-B893-9D19EFE8F7D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5492A3-FC8F-4C61-B893-9D19EFE8F7D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5492A3-FC8F-4C61-B893-9D19EFE8F7D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5492A3-FC8F-4C61-B893-9D19EFE8F7D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F83B920-2F2D-402A-921E-C9646334165D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F83B920-2F2D-402A-921E-C9646334165D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F83B920-2F2D-402A-921E-C9646334165D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F83B920-2F2D-402A-921E-C9646334165D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8C8D1D9-10CD-4DCB-85C0-7B5FFE698BC9}
+	EndGlobalSection
+EndGlobal

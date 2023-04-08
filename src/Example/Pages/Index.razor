@@ -1,0 +1,322 @@
+﻿@page "/"
+@using Blazor_Web3Modal;
+@using Example.Models;
+@using Nethereum.Hex.HexTypes;
+@using Nethereum.RPC.Eth.DTOs;
+@inject Web3ModalJsInterop interop;
+@implements IDisposable
+
+<PageTitle>Index</PageTitle>
+
+<p>
+    Last response returned from response returning call:<br />
+    @LastResponse
+</p>
+
+<CoreButton Label="Custom Message" ShowIcon="true" ShowBalance="true" />
+<NetworkSwitch />
+
+<button @onclick="Configure">
+    Configure
+</button>
+
+<button @onclick="OpenModal">
+    Open Modal
+</button>
+
+<button @onclick="ChangeTheme">
+    Change Theme
+</button>
+
+<button @onclick="Disconnect">
+    Disconnect
+</button>
+
+<button @onclick="GetBalance">
+    Get Balance
+</button>
+
+<button @onclick="GetEnsAvatar">
+    Get Ens Avatar
+</button>
+
+<button @onclick="GetEnsName">
+    Get Ens Name
+</button>
+
+<button @onclick="GetBlockNumber">
+    Get Block Number
+</button>
+
+<button @onclick="GetEnsAddress">
+    Get Ens Address
+</button>
+
+<button @onclick="GetFeeData">
+    Get Fee Data
+</button>
+
+<button @onclick="GetTransaction">
+    Get Transaction
+</button>
+
+<button @onclick="GetToken">
+    Get Token
+</button>
+
+<button @onclick="StartWatchingBlockNumber">
+    Start Watching Block Number
+</button>
+
+<button @onclick="StopWatchingBlockNumber">
+    Stop Watching Block Number
+</button>
+
+<button @onclick="GetAccountState">
+    Get Account State
+</button>
+
+<button @onclick="GetNetworkState">
+    Get Network State
+</button>
+
+<button @onclick="SwitchChain">
+    Switch Chain
+</button>
+
+<button @onclick="SendTransaction" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
+    Send Transaction
+</button>
+
+<button @onclick="SendContractTransaction" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
+    Send Contract Transaction
+</button>
+
+<button @onclick="SignMessage" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
+    Sign Message
+</button>
+
+<button @onclick="SignTypedData" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
+    Sign Typed Data
+</button>
+
+@code {
+    const string BoredApesContractAddress = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";
+
+    string LastResponse { get; set; } = string.Empty;
+    AccountState? CurrentAccountState { get; set; }
+    NetworkState? CurrentNetworkState { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        interop.AccountChanged += OnAccountChanged;
+        interop.NetworkChanged += OnNetworkChanged;
+        interop.BlockNumberChanged += OnBlockNumberChanged;
+        interop.TransactionMined += OnTransactionMined;
+    }
+
+    void OnAccountChanged(object? sender, AccountChangedEventArgs args)
+    {
+        CurrentAccountState = args.AccountState;
+        StateHasChanged();
+    }
+
+    void OnNetworkChanged(object? sender, NetworkChangedEventArgs args)
+    {
+        CurrentNetworkState = args.NetworkState;
+        StateHasChanged();
+    }
+
+    void OnBlockNumberChanged(object? sender, BlockNumberEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine(args.BlockNumber);
+    }
+
+    void OnTransactionMined(object? sender, TransactionMinedEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine(args.TransactionReceipt);
+    }
+
+    async Task Configure()
+    {
+        await interop.Configure();
+    }
+
+    async Task OpenModal()
+    {
+        await interop.OpenModal();
+    }
+
+    async Task ChangeTheme()
+    {
+        await interop.SetTheme(new Web3ModalThemeOptions()
+        {
+            ThemeMode = ThemeMode.Dark,
+            ThemeVariables = new Dictionary<string, string>
+            {
+                { "--w3m-accent-color", "#0000FF" },
+                { "--w3m-background-color", "#555500" }
+            }
+        });
+    }
+
+    async Task Disconnect()
+    {
+        await interop.Disconnect();
+    }
+
+    async Task GetBalance()
+    {
+        var result = await interop.GetBalance("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        LastResponse = result.ToString();
+    }
+
+    async Task GetEnsAvatar()
+    {
+        var result = await interop.GetEnsAvatar("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        LastResponse = result.ToString();
+    }
+
+    async Task GetEnsName()
+    {
+        var result = await interop.GetEnsName("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        LastResponse = result.ToString();
+    }
+
+    async Task GetBlockNumber()
+    {
+        var result = await interop.GetBlockNumber();
+        LastResponse = result.ToString();
+    }
+
+    async Task GetEnsAddress()
+    {
+        var result = await interop.GetEnsAddress("pingu.eth");
+        LastResponse = result.ToString();
+    }
+
+    async Task GetFeeData()
+    {
+        var result = await interop.GetFeeData();
+        LastResponse = result.ToString();
+    }
+
+    async Task GetTransaction()
+    {
+        var result = await interop.GetTransaction("TODO");
+        LastResponse = result.ToString();
+    }
+
+    async Task GetToken()
+    {
+        var result = await interop.GetToken("0xc18360217d8f7ab5e7c516566761ea12ce7f9d72");
+        LastResponse = result.ToString();
+    }
+
+    async Task StartWatchingBlockNumber()
+    {
+        await interop.StartWatchingBlockNumber();
+    }
+
+    async Task StopWatchingBlockNumber()
+    {
+        await interop.StopWatchingBlockNumber();
+    }
+
+    async Task GetAccountState()
+    {
+        var result = await interop.GetAccountState();
+        LastResponse = result.ToString();
+    }
+
+    async Task GetNetworkState()
+    {
+        var result = await interop.GetNetworkState();
+        LastResponse = result.ToString();
+    }
+
+    async Task SwitchChain()
+    {
+        var result = await interop.SwitchChain(5);
+        LastResponse = result.ToString();
+    }
+
+    async Task SendTransaction()
+    {
+        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
+        {
+            var result = await interop.SendTransaction(TransactionUtils.SendEthereumTransactionInput(CurrentAccountState.Address, CurrentAccountState.Address, 1));
+            LastResponse = result.ToString();
+            StateHasChanged();
+        }
+    }
+
+    async Task SendContractTransaction()
+    {
+        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
+        {
+            var setApproval = new SetApproval()
+            {
+                Operator = "0x0000000000000000000000000000000000000000",
+                Approved = false
+            };
+            var result = await interop.SendTransaction(TransactionUtils.SendContractTransactionInput(setApproval, CurrentAccountState.Address, BoredApesContractAddress));
+
+            LastResponse = result.ToString();
+        }
+    }
+
+    async Task SignMessage()
+    {
+        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
+        {
+            var result = await interop.SignMessage("Hello world");
+            LastResponse = result.ToString();
+        }
+    }
+
+    async Task SignTypedData()
+    {
+        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
+        {
+            var typedData = SignUtils.GetTypedData(new Nethereum.ABI.EIP712.Domain
+            {
+                Name = "Ether Mail",
+                Version = "1",
+                ChainId = 1,
+                VerifyingContract = "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+                }, typeof(Mail), typeof(Person));
+
+            var message = new Mail()
+            {
+                To = new List<Person>
+                {
+                    new Person
+                    {
+                        Name = "Bob",
+                        Wallets = new List<string>
+                        {
+                            "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+                            "0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57",
+                            "0xB0B0b0b0b0b0B000000000000000000000000000"
+                        }
+                    }
+                },
+                Contents = "Hello, Bob!"
+            };
+
+            var result = await interop.SignTypedData(typedData, message);
+            LastResponse = result.ToString();
+        }
+    }
+
+    public void Dispose()
+    {
+        interop.AccountChanged -= OnAccountChanged;
+        interop.NetworkChanged -= OnNetworkChanged;
+        interop.BlockNumberChanged -= OnBlockNumberChanged;
+        interop.TransactionMined -= OnTransactionMined;
+    }
+}

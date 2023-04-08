@@ -1,0 +1,15 @@
+﻿@inject Web3ModalJsInterop _web3ModalInterop
+
+<w3m-network-switch></w3m-network-switch>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _web3ModalInterop.Configure();
+        }
+    }
+}

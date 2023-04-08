@@ -1,0 +1,19 @@
+﻿@inject Web3ModalJsInterop _web3ModalInterop
+
+<w3m-core-button icon="@(ShowIcon ? "show" : "hide")" label="@Label" balance="@(ShowBalance ? "show" : "hide")"></w3m-core-button>
+
+@code {
+    [Parameter] public bool ShowIcon { get; set; } = true;
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public bool ShowBalance { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _web3ModalInterop.Configure();
+        }
+    }
+}
