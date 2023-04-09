@@ -9,11 +9,11 @@ using System.Text.Json.Serialization;
 
 namespace Blazor_Web3Modal;
 
-public class Web3ModalJsInterop : IAsyncDisposable
+public class Web3ModalInterop : IAsyncDisposable, IWeb3ModalInterop
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
     private readonly Web3ModalOptions _options;
-    private readonly DotNetObjectReference<Web3ModalJsInterop> _jsRef;
+    private readonly DotNetObjectReference<Web3ModalInterop> _jsRef;
 
     private bool _configured;
     private AccountState? _cachedAccountState;
@@ -22,7 +22,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
     const string AddressNotConnectedError = "Address is not yet connected. Specify an address instead.";
     const string DeserializingResultError = "Error deserialising result.";
 
-    public Web3ModalJsInterop(IJSRuntime jsRuntime, IOptions<Web3ModalOptions> options)
+    public Web3ModalInterop(IJSRuntime jsRuntime, IOptions<Web3ModalOptions> options)
     {
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import",
             "./_content/Blazor-Web3Modal/index.bundle.js").AsTask());
@@ -30,6 +30,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         _jsRef = DotNetObjectReference.Create(this);
     }
 
+    /// <inheritdoc />
     public async Task Configure()
     {
         if (!_configured)
@@ -48,6 +49,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         }
     }
 
+    /// <inheritdoc />
     public async Task OpenModal()
     {
         await EnsureConfigured();
@@ -55,6 +57,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("openModal");
     }
 
+    /// <inheritdoc />
     public async Task CloseModal()
     {
         await EnsureConfigured();
@@ -62,6 +65,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("closeModal");
     }
 
+    /// <inheritdoc />
     public async Task SetTheme(Web3ModalThemeOptions themeOptions)
     {
         await EnsureConfigured();
@@ -69,6 +73,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("setTheme", themeOptions.ThemeMode.GetEnumDescription(), themeOptions.ThemeVariables);
     }
 
+    /// <inheritdoc />
     public async Task Disconnect()
     {
         await EnsureConfigured();
@@ -76,6 +81,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("disconnect");
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<AccountState>> GetAccountState()
     {
         await EnsureConfigured();
@@ -89,6 +95,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<NetworkState>> GetNetworkState()
     {
         await EnsureConfigured();
@@ -102,6 +109,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<NetworkState>> SwitchChain(int chainId)
     {
         await EnsureConfigured();
@@ -115,6 +123,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> SendTransaction(TransactionInput transactionInput)
     {
         await EnsureConfigured();
@@ -128,6 +137,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> SignMessage(string message)
     {
         await EnsureConfigured();
@@ -141,6 +151,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> SignTypedData<T>(TypedData<Domain> typedData, T value)
     {
         await EnsureConfigured();
@@ -167,6 +178,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<FetchBalanceResult>> GetBalance()
     {
         if (_cachedAccountState is null || _cachedAccountState.Address is null)
@@ -175,6 +187,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return await GetBalance(_cachedAccountState.Address);
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<FetchBalanceResult>> GetBalance(string address, string? tokenAddress = null, int? chainId = null)
     {
         await EnsureConfigured();
@@ -188,6 +201,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> GetEnsAvatar()
     {
         if (_cachedAccountState is null || _cachedAccountState.Address is null)
@@ -196,6 +210,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return await GetEnsAvatar(_cachedAccountState.Address);
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> GetEnsAvatar(string address, int? chainId = null)
     {
         await EnsureConfigured();
@@ -209,6 +224,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> GetEnsName()
     {
         if (_cachedAccountState is null || _cachedAccountState.Address is null)
@@ -217,6 +233,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return await GetEnsName(_cachedAccountState.Address);
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> GetEnsName(string address, int? chainId = null)
     {
         await EnsureConfigured();
@@ -230,6 +247,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<int?>> GetBlockNumber(int? chainId = null)
     {
         await EnsureConfigured();
@@ -243,6 +261,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<string>> GetEnsAddress(string name, int? chainId = null)
     {
         await EnsureConfigured();
@@ -256,6 +275,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<FeeData>> GetFeeData(int? chainId = null)
     {
         await EnsureConfigured();
@@ -275,6 +295,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<TransactionData>> GetTransaction(string hash, int? chainId = null)
     {
         await EnsureConfigured();
@@ -288,6 +309,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<Web3ModalResult<TokenData>> GetToken(string address, int? chainId = null)
     {
         await EnsureConfigured();
@@ -301,19 +323,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         return result;
     }
 
-    public async Task<Web3ModalResult<TransactionReceipt>> WaitForTransaction(string hash, int? confirmations = null, int? timeout = null, int? chainId = null)
-    {
-        await EnsureConfigured();
-        var module = await _moduleTask.Value;
-        var stringResult = await module.InvokeAsync<string>("tryWaitForTransaction", hash, confirmations, timeout, chainId);
-        var result = JsonSerializer.Deserialize<Web3ModalResult<TransactionReceipt>>(stringResult);
-
-        if (result is null)
-            return new Web3ModalResult<TransactionReceipt>(DeserializingResultError, null, false);
-
-        return result;
-    }
-
+    /// <inheritdoc />
     public async Task StartWatchingBlockNumber(int? chainId = null)
     {
         await EnsureConfigured();
@@ -321,6 +331,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("startWatchingBlockNumber", chainId, _jsRef);
     }
 
+    /// <inheritdoc />
     public async Task StopWatchingBlockNumber()
     {
         await EnsureConfigured();
@@ -331,7 +342,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
     [JSInvokable()]
     public Task OnAccountChanged(string? account)
     {
-        if(account is null)
+        if (account is null)
         {
             _cachedAccountState = null;
         }
@@ -341,7 +352,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         }
 
         RaiseAccountChanged(_cachedAccountState);
-        
+
         return Task.CompletedTask;
     }
 
@@ -358,14 +369,14 @@ public class Web3ModalJsInterop : IAsyncDisposable
         }
 
         RaiseNetworkChanged(_cachedNetworkState);
-        
+
         return Task.CompletedTask;
     }
 
     [JSInvokable()]
     public Task OnBlockNumber(string? blockNumber)
     {
-        if(blockNumber is not null)
+        if (blockNumber is not null)
         {
             var blockNum = JsonSerializer.Deserialize<int>(blockNumber);
             RaiseOnBlockNumber(blockNum);
@@ -377,10 +388,10 @@ public class Web3ModalJsInterop : IAsyncDisposable
     [JSInvokable()]
     public Task OnTransactionComplete(string? transactionReceipt)
     {
-        if(transactionReceipt is not null)
+        if (transactionReceipt is not null)
         {
             var receipt = JsonSerializer.Deserialize<TransactionReceipt>(transactionReceipt);
-            if(receipt is not null)
+            if (receipt is not null)
             {
                 RaiseTransactionMined(receipt);
             }
@@ -390,6 +401,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
     }
 
 
+    /// <inheritdoc />
     public event EventHandler<AccountChangedEventArgs>? AccountChanged;
     private void RaiseAccountChanged(AccountState? accountState)
     {
@@ -400,6 +412,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         AccountChanged?.Invoke(this, e);
     }
 
+    /// <inheritdoc />
     public event EventHandler<NetworkChangedEventArgs>? NetworkChanged;
     private void RaiseNetworkChanged(NetworkState? networkState)
     {
@@ -410,6 +423,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         NetworkChanged?.Invoke(this, e);
     }
 
+    /// <inheritdoc />
     public event EventHandler<BlockNumberEventArgs>? BlockNumberChanged;
     private void RaiseOnBlockNumber(int blockNum)
     {
@@ -417,6 +431,7 @@ public class Web3ModalJsInterop : IAsyncDisposable
         BlockNumberChanged?.Invoke(this, e);
     }
 
+    /// <inheritdoc />
     public event EventHandler<TransactionMinedEventArgs>? TransactionMined;
     private void RaiseTransactionMined(TransactionReceipt transactionReceipt)
     {

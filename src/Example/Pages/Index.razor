@@ -3,7 +3,7 @@
 @using Example.Models;
 @using Nethereum.Hex.HexTypes;
 @using Nethereum.RPC.Eth.DTOs;
-@inject Web3ModalJsInterop interop;
+@inject IWeb3ModalInterop _interop;
 @implements IDisposable
 
 <PageTitle>Index</PageTitle>
@@ -111,10 +111,10 @@
     {
         base.OnInitialized();
 
-        interop.AccountChanged += OnAccountChanged;
-        interop.NetworkChanged += OnNetworkChanged;
-        interop.BlockNumberChanged += OnBlockNumberChanged;
-        interop.TransactionMined += OnTransactionMined;
+        _interop.AccountChanged += OnAccountChanged;
+        _interop.NetworkChanged += OnNetworkChanged;
+        _interop.BlockNumberChanged += OnBlockNumberChanged;
+        _interop.TransactionMined += OnTransactionMined;
     }
 
     void OnAccountChanged(object? sender, AccountChangedEventArgs args)
@@ -141,17 +141,17 @@
 
     async Task Configure()
     {
-        await interop.Configure();
+        await _interop.Configure();
     }
 
     async Task OpenModal()
     {
-        await interop.OpenModal();
+        await _interop.OpenModal();
     }
 
     async Task ChangeTheme()
     {
-        await interop.SetTheme(new Web3ModalThemeOptions()
+        await _interop.SetTheme(new Web3ModalThemeOptions()
         {
             ThemeMode = ThemeMode.Dark,
             ThemeVariables = new Dictionary<string, string>
@@ -164,82 +164,82 @@
 
     async Task Disconnect()
     {
-        await interop.Disconnect();
+        await _interop.Disconnect();
     }
 
     async Task GetBalance()
     {
-        var result = await interop.GetBalance("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        var result = await _interop.GetBalance("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
         LastResponse = result.ToString();
     }
 
     async Task GetEnsAvatar()
     {
-        var result = await interop.GetEnsAvatar("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        var result = await _interop.GetEnsAvatar("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
         LastResponse = result.ToString();
     }
 
     async Task GetEnsName()
     {
-        var result = await interop.GetEnsName("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
+        var result = await _interop.GetEnsName("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
         LastResponse = result.ToString();
     }
 
     async Task GetBlockNumber()
     {
-        var result = await interop.GetBlockNumber();
+        var result = await _interop.GetBlockNumber();
         LastResponse = result.ToString();
     }
 
     async Task GetEnsAddress()
     {
-        var result = await interop.GetEnsAddress("pingu.eth");
+        var result = await _interop.GetEnsAddress("pingu.eth");
         LastResponse = result.ToString();
     }
 
     async Task GetFeeData()
     {
-        var result = await interop.GetFeeData();
+        var result = await _interop.GetFeeData();
         LastResponse = result.ToString();
     }
 
     async Task GetTransaction()
     {
-        var result = await interop.GetTransaction("TODO");
+        var result = await _interop.GetTransaction("TODO");
         LastResponse = result.ToString();
     }
 
     async Task GetToken()
     {
-        var result = await interop.GetToken("0xc18360217d8f7ab5e7c516566761ea12ce7f9d72");
+        var result = await _interop.GetToken("0xc18360217d8f7ab5e7c516566761ea12ce7f9d72");
         LastResponse = result.ToString();
     }
 
     async Task StartWatchingBlockNumber()
     {
-        await interop.StartWatchingBlockNumber();
+        await _interop.StartWatchingBlockNumber();
     }
 
     async Task StopWatchingBlockNumber()
     {
-        await interop.StopWatchingBlockNumber();
+        await _interop.StopWatchingBlockNumber();
     }
 
     async Task GetAccountState()
     {
-        var result = await interop.GetAccountState();
+        var result = await _interop.GetAccountState();
         LastResponse = result.ToString();
     }
 
     async Task GetNetworkState()
     {
-        var result = await interop.GetNetworkState();
+        var result = await _interop.GetNetworkState();
         LastResponse = result.ToString();
     }
 
     async Task SwitchChain()
     {
-        var result = await interop.SwitchChain(5);
+        var result = await _interop.SwitchChain(5);
         LastResponse = result.ToString();
     }
 
@@ -247,7 +247,7 @@
     {
         if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
         {
-            var result = await interop.SendTransaction(TransactionUtils.SendEthereumTransactionInput(CurrentAccountState.Address, CurrentAccountState.Address, 1));
+            var result = await _interop.SendTransaction(TransactionUtils.SendEthereumTransactionInput(CurrentAccountState.Address, CurrentAccountState.Address, 1));
             LastResponse = result.ToString();
             StateHasChanged();
         }
@@ -262,7 +262,7 @@
                 Operator = "0x0000000000000000000000000000000000000000",
                 Approved = false
             };
-            var result = await interop.SendTransaction(TransactionUtils.SendContractTransactionInput(setApproval, CurrentAccountState.Address, BoredApesContractAddress));
+            var result = await _interop.SendTransaction(TransactionUtils.SendContractTransactionInput(setApproval, CurrentAccountState.Address, BoredApesContractAddress));
 
             LastResponse = result.ToString();
         }
@@ -272,7 +272,7 @@
     {
         if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
         {
-            var result = await interop.SignMessage("Hello world");
+            var result = await _interop.SignMessage("Hello world");
             LastResponse = result.ToString();
         }
     }
@@ -307,16 +307,16 @@
                 Contents = "Hello, Bob!"
             };
 
-            var result = await interop.SignTypedData(typedData, message);
+            var result = await _interop.SignTypedData(typedData, message);
             LastResponse = result.ToString();
         }
     }
 
     public void Dispose()
     {
-        interop.AccountChanged -= OnAccountChanged;
-        interop.NetworkChanged -= OnNetworkChanged;
-        interop.BlockNumberChanged -= OnBlockNumberChanged;
-        interop.TransactionMined -= OnTransactionMined;
+        _interop.AccountChanged -= OnAccountChanged;
+        _interop.NetworkChanged -= OnNetworkChanged;
+        _interop.BlockNumberChanged -= OnBlockNumberChanged;
+        _interop.TransactionMined -= OnTransactionMined;
     }
 }

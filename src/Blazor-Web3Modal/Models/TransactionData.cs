@@ -4,6 +4,29 @@ using System.Text.Json.Serialization;
 
 namespace Blazor_Web3Modal;
 
+/// <summary>
+/// Transaction Data
+/// </summary>
+/// <param name="TransactionHash">The hash of the transaction</param>
+/// <param name="Type">The transaction type</param>
+/// <param name="AccessList">The access list</param>
+/// <param name="BlockHash">The hash of the block the transaciton belongs to</param>
+/// <param name="BlockNumber">The block number the transaction belongs to</param>
+/// <param name="TransactionIndex">The index of the transaction within the block</param>
+/// <param name="Confirmations">How many confirmations the transaction has</param>
+/// <param name="From">Who the transaction was sent from</param>
+/// <param name="GasPrice">The gas price</param>
+/// <param name="MaxPriorityFeePerGas">The max priority fee per gas</param>
+/// <param name="MaxFeePerGas">The max fee per gas</param>
+/// <param name="GasLimit">The gas limit</param>
+/// <param name="To">Who the transaction was sent to</param>
+/// <param name="Value">The amount of Ethereum sent in the transaction</param>
+/// <param name="Nonce">The transaction nonce</param>
+/// <param name="Data">The transaction raw data</param>
+/// <param name="R">R</param>
+/// <param name="S">S</param>
+/// <param name="V">V</param>
+/// <param name="ChainId">The chain ID the transaction took place on</param>
 public record TransactionData([property: JsonPropertyName("hash")] string TransactionHash,
     [property: JsonPropertyName("type"), JsonConverter(typeof(IntToHexBigIntegerConverter))] HexBigInteger Type,
     [property: JsonPropertyName("accessList")] List<AccessList> AccessList,
@@ -26,5 +49,10 @@ public record TransactionData([property: JsonPropertyName("hash")] string Transa
     [property: JsonPropertyName("chainId"), JsonConverter(typeof(IntToHexBigIntegerConverter))] HexBigInteger ChainId
     );
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Address"></param>
+/// <param name="StorageKeys"></param>
 public record AccessList([property: JsonPropertyName("address")] string Address,
     [property: JsonPropertyName("storageKeys")] List<string>? StorageKeys);
