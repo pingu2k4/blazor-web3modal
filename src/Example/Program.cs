@@ -23,8 +23,8 @@ builder.Services.AddBlazorWeb3ModalComponents(options =>
         { "--w3m-accent-color", "#FF0000" },
         { "--w3m-background-color", "#00FF00" }
     };
-    options.TermsOfServiceUrl = "/terms";
-    options.PrivacyPolicyUrl = "/privacy";
+    options.TermsOfServiceUrl = "terms";
+    options.PrivacyPolicyUrl = "privacy";
 });
 
 await builder.Build().RunAsync();
