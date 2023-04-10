@@ -3,6 +3,9 @@
 # Blazor-Web3Modal
 Blazor-Web3Modal is a library which provides extremely simple, yet fully featured usage of the [Web3Modal](https://web3modal.com/) library in your Blazor application. Connect your Blazor app to your users Web3 Wallets.
 
+## 🌐 Example Site
+You can see a fully featured [example website here](https://pingu2k4.github.io/blazor-web3modal/).
+
 ## 📦 Installing
 To install the package you can either install with the following .NET CLI command:
 ```
