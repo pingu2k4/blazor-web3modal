@@ -5,6 +5,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Blazor_Web3Modal</RootNamespace>
+	
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageId>Blazor-Web3Modal</PackageId>
+    <Authors>Pingu</Authors>
+    <Description>A library to provide simple interop access to Web3Modal in Blazor applications</Description>
+    <Copyright>Copyright 2023 (c) Pingu. All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/pingu2k4/blazor-web3modal</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pingu2k4/blazor-web3modal</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+	<PackageTags>Blazor;Razor;Components;Web3;Modal;Web3Modal;Web3 Modal;Dapp;Eth;Ethereum;CSharp;Web</PackageTags>
   </PropertyGroup>
 
 
