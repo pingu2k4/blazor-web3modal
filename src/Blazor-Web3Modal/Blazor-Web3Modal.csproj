@@ -15,6 +15,7 @@
     <RepositoryUrl>https://github.com/pingu2k4/blazor-web3modal</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageTags>Blazor;Razor;Components;Web3;Modal;Web3Modal;Web3 Modal;Dapp;Eth;Ethereum;CSharp;Web</PackageTags>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
 
