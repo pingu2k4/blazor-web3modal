@@ -68,9 +68,6 @@ jobs:
           - name: Add .nojekyll file
             run: touch src/Example/bin/Release/net7.0/publish/wwwroot/.nojekyll
 
-          - name: Force-adding index.bundle.js from library to source control for GH Pages
-            run: git add --force src/Example/bin/Release/net7.0/publish/wwwroot/_content/Blazor-Web3Modal/index.bundle.js src/Example/bin/Release/net7.0/publish/wwwroot/_content/Blazor-Web3Modal/index.bundle.js.map
-
           - name: Commit wwwroot to GitHub Pages
             uses: JamesIves/github-pages-deploy-action@v4
             with:
