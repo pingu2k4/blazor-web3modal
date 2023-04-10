@@ -21,9 +21,9 @@ jobs:
             changes-detected: ${{ steps.filter.outputs.changes }}
         steps:
           - uses: actions/checkout@V2
-              name: Checkout
-              with:
-                  ref: ${{ env.BRANCH }}
+            name: Checkout
+            with:
+                ref: ${{ env.BRANCH }}
 
           - uses: dorny/paths-filter@v2
             name: Checking for changes in either Example site or Library code
