@@ -8,104 +8,418 @@
 
 <PageTitle>Index</PageTitle>
 
-<p>
-    Last response returned from response returning call:<br />
-    @LastResponse
-</p>
+<div class="container">
+    <h1>
+        Blazor-Web3Modal by <a href="https://twitter.com/pingu2k4" target="_blank">Pingu</a>
+    </h1>
 
-<CoreButton Label="Custom Message" ShowIcon="true" ShowBalance="true" />
-<NetworkSwitch />
+    <p>
+        This is a running example of <a href="https://github.com/pingu2k4/blazor-web3modal" target="_blank">Blazor-Web3Modal</a> - A library to easily connect your Blazor website to Web3 wallets using <a href="https://web3modal.com/" target="_blank">Web3Modal</a>.
+    </p>
 
-<button @onclick="Configure">
-    Configure
-</button>
+    <MenuGroup Name="Controls">
+        <MenuButton Name="Core Button" Identifier="core-button" />
+        <MenuButton Name="Network Switch" Identifier="network-switch" />
+    </MenuGroup>
 
-<button @onclick="OpenModal">
-    Open Modal
-</button>
+    <MenuGroup Name="General Use">
+        <MenuButton Name="Events" Identifier="events" />
+        <MenuButton Name="Configure" Identifier="configure" />
+        <MenuButton Name="Open Modal" Identifier="open-modal" />
+        <MenuButton Name="Switch Chain" Identifier="switch-chain" />
+        <MenuButton Name="Change Theme" Identifier="change-theme" />
+        <MenuButton Name="Disconnect" Identifier="disconnect" />
+    </MenuGroup>
 
-<button @onclick="ChangeTheme">
-    Change Theme
-</button>
+    <MenuGroup Name="Interactivity">
+        <MenuButton Name="Sign Message" Identifier="sign-message" />
+        <MenuButton Name="Sign Typed Data" Identifier="sign-typed-data" />
+        <MenuButton Name="Send Eth" Identifier="send-eth" />
+        <MenuButton Name="Send Contract Transaction" Identifier="send-contract-transaction" />
+    </MenuGroup>
 
-<button @onclick="Disconnect">
-    Disconnect
-</button>
+    <MenuGroup Name="Retrieving Data">
+        <MenuButton Name="Get Account State" Identifier="get-account-state" />
+        <MenuButton Name="Get Network State" Identifier="get-network-state" />
+        <MenuButton Name="Get Balance" Identifier="get-balance" />
+        <MenuButton Name="Get ENS Avatar" Identifier="get-ens-avatar" />
+        <MenuButton Name="Get ENS Name" Identifier="get-ens-name" />
+        <MenuButton Name="Get ENS Address" Identifier="get-ens-address" />
+        <MenuButton Name="Get Block Number" Identifier="get-block-number" />
+        <MenuButton Name="Get Fee Data" Identifier="get-fee-data" />
+        <MenuButton Name="Get Transaction" Identifier="get-transaction" />
+        <MenuButton Name="Get Token" Identifier="get-token" />
+    </MenuGroup>
 
-<button @onclick="GetBalance">
-    Get Balance
-</button>
+    <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3">
 
-<button @onclick="GetEnsAvatar">
-    Get Ens Avatar
-</button>
+        <ExampleContainer Title="Core Button" HeaderIdentifier="core-button">
+            <Instructions>
+                This is the core button, provided by W3M.
+                <div class="d-flex flex-column gap-2">
+                    <input @bind-value="CoreButtonLabel" placeholder="Custom Label" />
+                    <div>
+                        <InputCheckbox @bind-Value="CoreButtonShowIcon" id="show-icon-toggle" />
+                        <label for="show-icon-toggle">Show Icon</label>
+                    </div>
+                    <div>
+                        <InputCheckbox @bind-Value="CoreButtonShowBalance" id="show-balance-toggle" />
+                        <label for="show-balance-toggle">Show Balance</label>
+                    </div>
+                </div>
+            </Instructions>
+            <ChildContent>
+                <CoreButton Label="@CoreButtonLabel" ShowIcon="CoreButtonShowIcon" ShowBalance="CoreButtonShowBalance" />
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetEnsName">
-    Get Ens Name
-</button>
+        <ExampleContainer Title="Network Switch" HeaderIdentifier="network-switch">
+            <Instructions>
+                Allows the user to change network, if you have specified more than one.
+            </Instructions>
+            <ChildContent>
+                <NetworkSwitch />
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetBlockNumber">
-    Get Block Number
-</button>
+        <ExampleContainer Title="Events" HeaderIdentifier="events" Output="@EventsResults">
+            <Instructions>
+                <CollapsableContent>
+                    <PreviewContent>
+                        Here we are showing all events which you can subscribe to, as they happen. There are 4 events in total:
+                    </PreviewContent>
+                    <CollapseContent>
+                        <ul>
+                            <li>
+                                Account Changed - Fires when the connected account, or its connection state changes
+                            </li>
+                            <li>
+                                Network Changed - Fires when the connected network, or its connection state changes
+                            </li>
+                            <li>
+                                Transaction Mined - Fires when a transaction sent via W3M is mined on the blockchain
+                            </li>
+                            <li>
+                                Block Number Changed - Fires when there is a new block number (We must start listening first for this one to fire. We can also stop listening at any time)
+                            </li>
+                        </ul>
+                    </CollapseContent>
+                </CollapsableContent> 
+            </Instructions>
+            <ChildContent>
+                <div class="d-grid" style="grid-template-columns: 1fr 1fr">
+                    <button @onclick="StartWatchingBlockNumber">
+                        Start Watching Block Number
+                    </button>
 
-<button @onclick="GetEnsAddress">
-    Get Ens Address
-</button>
+                    <button @onclick="StopWatchingBlockNumber">
+                        Stop Watching Block Number
+                    </button>
+                </div>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetFeeData">
-    Get Fee Data
-</button>
+        <ExampleContainer Title="Configure" HeaderIdentifier="configure">
+            <Instructions>
+                <CollapsableContent>
+                    <PreviewContent>
+                        Before we can do anything with Web3Modal, it needs to be configured. We need to call Configure at any point previous to needing it, but not before JS is ready
+                    </PreviewContent>
+                    <CollapseContent>
+                        (So calling on after render in a component, on the first render is suitable). If you have either the Core button or the Network switch, these call configure themselves, and so you won't need to do it yourself in that case. Calling anything before Configure has been called will call configure themselves if it hasn't been called, which will add to the time of your request when you need it. As this page has the core button and network switch, nothing will happen when clicking this, but it shows the functionality in the code at least.
+                    </CollapseContent>
+                </CollapsableContent>
+            </Instructions>
+            <ChildContent>
+                <button @onclick="Configure">
+                    Configure
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetTransaction">
-    Get Transaction
-</button>
+        <ExampleContainer Title="Open Modal" HeaderIdentifier="open-modal">
+            <Instructions>
+                This will open the modal for the user.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="OpenModal">
+                    Open Modal
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetToken">
-    Get Token
-</button>
+        <ExampleContainer Title="Switch Chain" HeaderIdentifier="switch-chain" Output="@SwitchChainResult">
+            <Instructions>
+                Here, you can make a request that the users wallet switches to a different chain.
+            </Instructions>
+            <ChildContent>
+                <div class="d-grid" style="grid-template-columns: 1fr 1fr">
+                    <button @onclick="SwitchChainMainnet" disabled="@IsNotConnected">
+                        Switch Chain (Mainnet)
+                    </button>
+                    <button @onclick="SwitchChainGoerli" disabled="@IsNotConnected">
+                        Switch Chain (Goerli)
+                    </button>
+                </div>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="StartWatchingBlockNumber">
-    Start Watching Block Number
-</button>
+        <ExampleContainer Title="Change Theme" HeaderIdentifier="change-theme">
+            <Instructions>
+                <CollapsableContent>
+                    <PreviewContent>
+                        Here, you can change the theme of Web3Modal. There are many options, but in this sample we will change the themeMode to dark, as well as
+                    </PreviewContent>
+                    <CollapseContent>
+                        the background and accent colours. To see all the options, visit the <a href="https://docs.walletconnect.com/2.0/web3modal/theming" target="_blank">Theming</a> page for Web3Modal.
+                    </CollapseContent>
+                </CollapsableContent>
+            </Instructions>
+            <ChildContent>
+                <button @onclick="ChangeTheme">
+                    Change Theme
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="StopWatchingBlockNumber">
-    Stop Watching Block Number
-</button>
+        <ExampleContainer Title="Disconnect" HeaderIdentifier="disconnect">
+            <Instructions>
+                Disconnects the connected wallet from Web3Modal. (If not accessible, connect wallet first)
+            </Instructions>
+            <ChildContent>
+                <button @onclick="Disconnect" disabled="@IsNotConnected">
+                    Disconnect
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetAccountState">
-    Get Account State
-</button>
+        <ExampleContainer Title="Sign Message" HeaderIdentifier="sign-message" Output="@SignMessageResult">
+            <Instructions>
+                Here, you can request that the user sign any textual message via their wallet.
+                <div class="d-flex flex-column gap-2">
+                    <input @bind-value="SignMessageMessage" placeholder="The message that you want signed" />
+                </div>
+            </Instructions>
+            <ChildContent>
+                <button @onclick="SignMessage" disabled="@IsNotConnected">
+                    Sign Message
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="GetNetworkState">
-    Get Network State
-</button>
+        <ExampleContainer Title="Sign Typed Data" HeaderIdentifier="sign-typed-data" Output="@SignTypedDataResult">
+            <Instructions>
+                Here, you can request that the user sign typed data. You can use the <code>SignUtils.GetTypedData</code> utility to generate the input that you require.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="SignTypedData" disabled="@IsNotConnected">
+                    Sign Typed Data
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="SwitchChain">
-    Switch Chain
-</button>
+        <ExampleContainer Title="Send Eth" HeaderIdentifier="send-eth" Output="@SendEthResult">
+            <Instructions>
+                <CollapsableContent>
+                    <PreviewContent>
+                        This shows how you can send Eth to another wallet. The transaction will attempt to send 0.01 Eth from
+                    </PreviewContent>
+                    <CollapseContent>
+                        the connected wallet, back to the connected wallet so you will only pay the gas costs if you do submit.
+                    </CollapseContent>
+                </CollapsableContent>
+            </Instructions>
+            <ChildContent>
+                <button @onclick="SendTransaction" disabled="@IsNotConnected">
+                    Send Transaction
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="SendTransaction" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
-    Send Transaction
-</button>
+        <ExampleContainer Title="Send Contract Transaction" HeaderIdentifier="send-contract-transaction" Output="@SendContractTransactionResult">
+            <Instructions>
+                <CollapsableContent>
+                    <PreviewContent>
+                        This shows how you can send a transaction to a contract address, invoking a function. You will need to
+                    </PreviewContent>
+                    <CollapseContent>
+                        replicate the function as a <code>FunctionMessage</code> first, and then provide the completed <code>FunctionMessage</code> along with the sending address and the contract address you are interacting with to our utility function <code>TransactionUtils.SendContractTransactionInput</code>. This will return the details you need to generate and send the transaction. The transaction which this example generates will <strong>REVOKE</strong> access to the Bored Ape Yacht Club contract for the address '0x0000.0000' - So there is no risk posed by submitting this particular transaction other than the gas cost which you will pay.
+                    </CollapseContent>
+                </CollapsableContent>
+            </Instructions>
+            <ChildContent>
+                <button @onclick="SendContractTransaction" disabled="@IsNotConnected">
+                    Send Contract Transaction
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="SendContractTransaction" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
-    Send Contract Transaction
-</button>
+        <ExampleContainer Title="Get Account State" HeaderIdentifier="get-account-state" Output="@GetAccountStateResult">
+            <Instructions>
+                This will retrieve the state of the currently connected account, and its connection status.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetAccountState">
+                    Get Account State
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="SignMessage" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
-    Sign Message
-</button>
+        <ExampleContainer Title="Get Network State" HeaderIdentifier="get-network-state" Output="@GetNetworkStateResult">
+            <Instructions>
+                This will retrieve the state of the currently connected network, if any.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetNetworkState">
+                    Get Network State
+                </button>
+            </ChildContent>
+        </ExampleContainer>
 
-<button @onclick="SignTypedData" disabled="@(CurrentAccountState is null || CurrentAccountState.Address is null)">
-    Sign Typed Data
-</button>
+        <ExampleContainer Title="Get Balance" Output="@GetBalanceResult" HeaderIdentifier="get-balance">
+            <Instructions>
+                Gets the balance of the provided wallet. Can be used to get Eth balance or ERC20 balances.
+            </Instructions>
+            <ChildContent>
+                <div class="d-grid" style="grid-template-columns: 1fr 1fr">
+                    <button @onclick="GetVitalikBalance">
+                        Get Vitalik's Balance
+                    </button>
+                    <button @onclick="GetConnectedBalance" disabled="@IsNotConnected">
+                        Get Connected Wallet Balance
+                    </button>
+                    <button @onclick="GetVitalikUsdcBalance">
+                        Get Vitalik's USDC Balance
+                    </button>
+                    <button @onclick="GetConnectedUsdcBalance" disabled="@IsNotConnected">
+                        Get Connected Wallet USDC Balance
+                    </button>
+                </div>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get ENS Avatar" Output="@GetEnsAvatarResult" HeaderIdentifier="get-ens-avatar">
+            <Instructions>
+                Gets the ENS avatar set (if any) for the provided wallet.
+            </Instructions>
+            <ChildContent>
+                <div class="d-grid" style="grid-template-columns: 1fr 1fr">
+                    <button @onclick="GetVitalikEnsAvatar">
+                        Get Vitalik's Ens Avatar
+                    </button>
+                    <button @onclick="GetConnectedEnsAvatar" disabled="@IsNotConnected">
+                        Get Connect Wallet Ens Avatar
+                    </button>
+                </div>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get ENS Name" Output="@GetEnsNameResult" HeaderIdentifier="get-ens-name">
+            <Instructions>
+                Providing an address, we can get the ENS name set up for that address's reverse name resolution.
+            </Instructions>
+            <ChildContent>
+                <div class="d-grid" style="grid-template-columns: 1fr 1fr">
+                    <button @onclick="GetVitalikEnsName">
+                        Get Vitalik's Ens Name
+                    </button>
+                    <button @onclick="GetConnectedEnsName" disabled="@IsNotConnected">
+                        Get Connected Wallet Ens Name
+                    </button>
+                </div>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get ENS Address" HeaderIdentifier="get-ens-address" Output="@GetEnsAddressResult">
+            <Instructions>
+                This allows you to get the Address that an ENS address points to. The example resolves 'vitalik.eth' to its address.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetVitalikEnsAddress">
+                    Get Ens Address
+                </button>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get Block Number" HeaderIdentifier="get-block-number" Output="@GetBlockNumberResult">
+            <Instructions>
+                This will simply get the current block number.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetBlockNumber">
+                    Get Block Number
+                </button>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get Fee Data" HeaderIdentifier="get-fee-data" Output="@GetFeeDataResult">
+            <Instructions>
+                This will get the current network fee data.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetFeeData">
+                    Get Fee Data
+                </button>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get Transaction" HeaderIdentifier="get-transaction" Output="@GetTransactionResult">
+            <Instructions>
+                This will get the first transaction mined on Ethereum, and return its data. You can get any transaction by its hash.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetTransaction">
+                    Get Transaction
+                </button>
+            </ChildContent>
+        </ExampleContainer>
+
+        <ExampleContainer Title="Get Token" HeaderIdentifier="get-token" Output="@GetTokenResult">
+            <Instructions>
+                This will get the data for USDC Token. You can get the data for any token, simply provide the contract address.
+            </Instructions>
+            <ChildContent>
+                <button @onclick="GetToken">
+                    Get Token
+                </button>
+            </ChildContent>
+        </ExampleContainer>
+    </div>
+</div>
 
 @code {
+    const string VitalikWalletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";
+    const string VitalikEnsAddress = "vitalik.eth";
+    const string UsdcContractAddress = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
     const string BoredApesContractAddress = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";
+    const string NullAddress = "0x0000000000000000000000000000000000000000";
+    const string FirstTransactionHash = "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060";
 
-    string LastResponse { get; set; } = string.Empty;
     AccountState? CurrentAccountState { get; set; }
     NetworkState? CurrentNetworkState { get; set; }
+    bool IsNotConnected => CurrentAccountState is null || CurrentAccountState.Address is null;
+
+    public string? CoreButtonLabel { get; set; }
+    public bool CoreButtonShowIcon { get; set; } = true;
+    public bool CoreButtonShowBalance { get; set; } = true;
+    public string SignMessageMessage { get; set; } = "Hello, world!";
+
+    public string EventsResults { get; set; } = string.Empty;
+    public string? SwitchChainResult { get; set; }
+    public string? SignMessageResult { get; set; }
+    public string? SignTypedDataResult { get; set; }
+    public string? SendEthResult { get; set; }
+    public string? SendContractTransactionResult { get; set; }
+    public string? GetAccountStateResult { get; set; }
+    public string? GetNetworkStateResult { get; set; }
+    public string? GetBalanceResult { get; set; }
+    public string? GetEnsAvatarResult { get; set; }
+    public string? GetEnsNameResult { get; set; }
+    public string? GetEnsAddressResult { get; set; }
+    public string? GetBlockNumberResult { get; set; }
+    public string? GetFeeDataResult { get; set; }
+    public string? GetTransactionResult { get; set; }
+    public string? GetTokenResult { get; set; }
 
     protected override void OnInitialized()
     {
@@ -120,23 +434,43 @@
     void OnAccountChanged(object? sender, AccountChangedEventArgs args)
     {
         CurrentAccountState = args.AccountState;
+        if (args.AccountState is not null)
+        {
+            EventsResults += args.AccountState.ToString() + Environment.NewLine + Environment.NewLine;
+        }
         StateHasChanged();
     }
 
     void OnNetworkChanged(object? sender, NetworkChangedEventArgs args)
     {
         CurrentNetworkState = args.NetworkState;
+        if (args.NetworkState is not null)
+        {
+            EventsResults += args.NetworkState?.ToString() + Environment.NewLine + Environment.NewLine;
+        }
         StateHasChanged();
     }
 
     void OnBlockNumberChanged(object? sender, BlockNumberEventArgs args)
     {
-        System.Diagnostics.Debug.WriteLine(args.BlockNumber);
+        EventsResults += "New Block Number: " + args.BlockNumber.ToString() + Environment.NewLine + Environment.NewLine;
+        StateHasChanged();
     }
 
     void OnTransactionMined(object? sender, TransactionMinedEventArgs args)
     {
-        System.Diagnostics.Debug.WriteLine(args.TransactionReceipt);
+        EventsResults += args.TransactionReceipt.ToString() + Environment.NewLine + Environment.NewLine;
+        StateHasChanged();
+    }
+
+    async Task StartWatchingBlockNumber()
+    {
+        await _interop.StartWatchingBlockNumber();
+    }
+
+    async Task StopWatchingBlockNumber()
+    {
+        await _interop.StopWatchingBlockNumber();
     }
 
     async Task Configure()
@@ -147,6 +481,18 @@
     async Task OpenModal()
     {
         await _interop.OpenModal();
+    }
+
+    async Task SwitchChainMainnet()
+    {
+        var result = await _interop.SwitchChain(1);
+        SwitchChainResult = result.ToString();
+    }
+
+    async Task SwitchChainGoerli()
+    {
+        var result = await _interop.SwitchChain(5);
+        SwitchChainResult = result.ToString();
     }
 
     async Task ChangeTheme()
@@ -167,113 +513,12 @@
         await _interop.Disconnect();
     }
 
-    async Task GetBalance()
-    {
-        var result = await _interop.GetBalance("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
-        LastResponse = result.ToString();
-    }
-
-    async Task GetEnsAvatar()
-    {
-        var result = await _interop.GetEnsAvatar("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
-        LastResponse = result.ToString();
-    }
-
-    async Task GetEnsName()
-    {
-        var result = await _interop.GetEnsName("0xAff1BF27f0aE7ce8AC0b7d3Ec7638933eDE0194E");
-        LastResponse = result.ToString();
-    }
-
-    async Task GetBlockNumber()
-    {
-        var result = await _interop.GetBlockNumber();
-        LastResponse = result.ToString();
-    }
-
-    async Task GetEnsAddress()
-    {
-        var result = await _interop.GetEnsAddress("pingu.eth");
-        LastResponse = result.ToString();
-    }
-
-    async Task GetFeeData()
-    {
-        var result = await _interop.GetFeeData();
-        LastResponse = result.ToString();
-    }
-
-    async Task GetTransaction()
-    {
-        var result = await _interop.GetTransaction("TODO");
-        LastResponse = result.ToString();
-    }
-
-    async Task GetToken()
-    {
-        var result = await _interop.GetToken("0xc18360217d8f7ab5e7c516566761ea12ce7f9d72");
-        LastResponse = result.ToString();
-    }
-
-    async Task StartWatchingBlockNumber()
-    {
-        await _interop.StartWatchingBlockNumber();
-    }
-
-    async Task StopWatchingBlockNumber()
-    {
-        await _interop.StopWatchingBlockNumber();
-    }
-
-    async Task GetAccountState()
-    {
-        var result = await _interop.GetAccountState();
-        LastResponse = result.ToString();
-    }
-
-    async Task GetNetworkState()
-    {
-        var result = await _interop.GetNetworkState();
-        LastResponse = result.ToString();
-    }
-
-    async Task SwitchChain()
-    {
-        var result = await _interop.SwitchChain(5);
-        LastResponse = result.ToString();
-    }
-
-    async Task SendTransaction()
-    {
-        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
-        {
-            var result = await _interop.SendTransaction(TransactionUtils.SendEthereumTransactionInput(CurrentAccountState.Address, CurrentAccountState.Address, 1));
-            LastResponse = result.ToString();
-            StateHasChanged();
-        }
-    }
-
-    async Task SendContractTransaction()
-    {
-        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
-        {
-            var setApproval = new SetApproval()
-            {
-                Operator = "0x0000000000000000000000000000000000000000",
-                Approved = false
-            };
-            var result = await _interop.SendTransaction(TransactionUtils.SendContractTransactionInput(setApproval, CurrentAccountState.Address, BoredApesContractAddress));
-
-            LastResponse = result.ToString();
-        }
-    }
-
     async Task SignMessage()
     {
         if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
         {
-            var result = await _interop.SignMessage("Hello world");
-            LastResponse = result.ToString();
+            var result = await _interop.SignMessage(SignMessageMessage);
+            SignMessageResult = result.ToString();
         }
     }
 
@@ -282,16 +527,16 @@
         if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
         {
             var typedData = SignUtils.GetTypedData(new Nethereum.ABI.EIP712.Domain
-            {
-                Name = "Ether Mail",
-                Version = "1",
-                ChainId = 1,
-                VerifyingContract = "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+                {
+                    Name = "Ether Mail",
+                    Version = "1",
+                    ChainId = 1,
+                    VerifyingContract = "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
                 }, typeof(Mail), typeof(Person));
 
             var message = new Mail()
-            {
-                To = new List<Person>
+                {
+                    To = new List<Person>
                 {
                     new Person
                     {
@@ -304,12 +549,123 @@
                         }
                     }
                 },
-                Contents = "Hello, Bob!"
-            };
+                    Contents = "Hello, Bob!"
+                };
 
             var result = await _interop.SignTypedData(typedData, message);
-            LastResponse = result.ToString();
+            SignTypedDataResult = result.ToString();
         }
+    }
+
+    async Task SendTransaction()
+    {
+        var result = await _interop.SendTransaction(TransactionUtils.SendEthereumTransactionInput(CurrentAccountState!.Address!, CurrentAccountState.Address!, 0.01m));
+        SendEthResult = result.ToString();
+    }
+
+    async Task SendContractTransaction()
+    {
+        if (CurrentAccountState is not null && CurrentAccountState.Address is not null)
+        {
+            var setApproval = new SetApproval()
+                {
+                    Operator = NullAddress,
+                    Approved = false
+                };
+            var result = await _interop.SendTransaction(TransactionUtils.SendContractTransactionInput(setApproval, CurrentAccountState.Address, BoredApesContractAddress));
+
+            SendContractTransactionResult = result.ToString();
+        }
+    }
+
+    async Task GetAccountState()
+    {
+        var result = await _interop.GetAccountState();
+        GetAccountStateResult = result.ToString();
+    }
+
+    async Task GetNetworkState()
+    {
+        var result = await _interop.GetNetworkState();
+        GetNetworkStateResult = result.ToString();
+    }
+
+    async Task GetVitalikBalance()
+    {
+        var result = await _interop.GetBalance(VitalikWalletAddress);
+        GetBalanceResult = result.ToString();
+    }
+
+    async Task GetConnectedBalance()
+    {
+        var result = await _interop.GetBalance();
+        GetBalanceResult = result.ToString();
+    }
+
+    async Task GetVitalikUsdcBalance()
+    {
+        var result = await _interop.GetBalance(VitalikWalletAddress, UsdcContractAddress);
+        GetBalanceResult = result.ToString();
+    }
+
+    async Task GetConnectedUsdcBalance()
+    {
+        var result = await _interop.GetBalance(CurrentAccountState!.Address!, UsdcContractAddress);
+        GetBalanceResult = result.ToString();
+    }
+
+    async Task GetVitalikEnsAvatar()
+    {
+        var result = await _interop.GetEnsAvatar(VitalikWalletAddress);
+        GetEnsAvatarResult = result.ToString();
+    }
+
+    async Task GetConnectedEnsAvatar()
+    {
+        var result = await _interop.GetEnsAvatar();
+        GetEnsAvatarResult = result.ToString();
+    }
+
+    async Task GetVitalikEnsName()
+    {
+        var result = await _interop.GetEnsName(VitalikWalletAddress);
+        GetEnsNameResult = result.ToString();
+    }
+
+    async Task GetConnectedEnsName()
+    {
+        var result = await _interop.GetEnsName();
+        GetEnsNameResult = result.ToString();
+    }
+
+    async Task GetVitalikEnsAddress()
+    {
+        var result = await _interop.GetEnsAddress(VitalikEnsAddress);
+        GetEnsAddressResult = result.ToString();
+    }
+
+    async Task GetBlockNumber()
+    {
+        var result = await _interop.GetBlockNumber();
+        GetBlockNumberResult = result.ToString();
+    }
+
+    async Task GetFeeData()
+    {
+        var result = await _interop.GetFeeData();
+        GetFeeDataResult = result.ToString();
+    }
+
+    async Task GetTransaction()
+    {
+        var result = await _interop.GetTransaction(FirstTransactionHash);
+        GetTransactionResult = result.ToString();
+    }
+
+    async Task GetToken()
+    {
+        var result = await _interop.GetToken(UsdcContractAddress);
+        GetTokenResult = result.ToString();
     }
 
     public void Dispose()

@@ -1,0 +1,37 @@
+﻿<div class="col mb-3">
+        <div class="card">
+            <div class="card-header" id="@($"{HeaderIdentifier}-example")" style="transition: all 1s ease-in-out;">
+                @Title
+            </div>
+            <div class="card-body">
+                @if (Instructions is not null)
+                {
+                    <p class="card-text">
+                        @Instructions
+                    </p>
+                    <hr />
+                }
+                @ChildContent
+                @if (!string.IsNullOrEmpty(Output))
+                {
+                    <hr />
+                    <div class="mt-3">
+                        <span>Output:</span>
+                        <pre class="bg-light output" style="max-height:250px;">
+                            <samp style="white-space:pre-line;">
+                                @Output
+                            </samp>
+                        </pre>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+@code {
+    [Parameter, EditorRequired] public required string Title { get; set; }
+    [Parameter] public RenderFragment? Instructions { get; set; }
+    [Parameter, EditorRequired] public required RenderFragment ChildContent { get; set; }
+    [Parameter] public string? Output { get; set; }
+    [Parameter, EditorRequired] public required string HeaderIdentifier { get; set; }
+}

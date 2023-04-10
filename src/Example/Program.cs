@@ -1,3 +1,4 @@
+using Blazor_Web3Modal;
 using Example;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -10,7 +11,12 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddBlazorWeb3ModalComponents(options =>
 {
-    options.ProjectId = "1bb3663fdc2a0c496edb4535a776e7aa";
+    options.ProjectId = "40bbc71ff54bc794c55a448a49996fc7";
+    options.Chains = new List<Chain>
+    {
+        Chain.Mainnet,
+        Chain.Goerli
+    };
     options.AutoConnect = true;
     options.ThemeOptions.ThemeVariables = new Dictionary<string, string>
     {

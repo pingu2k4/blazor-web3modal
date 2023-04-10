@@ -1,0 +1,11 @@
+﻿<div class="input-group mb-3">
+    <label class="input-group-text">
+        @Name
+    </label>
+    @ChildContent
+</div>
+
+@code {
+    [Parameter, EditorRequired] public required string Name { get; set; }
+    [Parameter, EditorRequired] public required RenderFragment ChildContent { get; set; }
+}

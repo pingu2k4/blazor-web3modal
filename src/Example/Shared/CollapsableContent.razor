@@ -1,0 +1,34 @@
+﻿@if(PreviewContent is not null)
+{
+    @PreviewContent
+    if(Collapsed)
+    {
+        <span>...</span>
+    }
+}
+@if (!Collapsed)
+{
+    @CollapseContent
+}
+<br />
+<a class="refless-link" style="cursor:pointer;" @onclick="Toggle">
+    @if (Collapsed)
+    {
+        <span>+ Show More</span>
+    }
+    else
+    {
+        <span>- Show Less</span>
+    }
+</a>
+
+@code {
+    [Parameter] public RenderFragment? PreviewContent { get; set; }
+    [Parameter, EditorRequired] public required RenderFragment CollapseContent { get; set; }
+    [Parameter] public bool Collapsed { get; set; } = true;
+
+    void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+}

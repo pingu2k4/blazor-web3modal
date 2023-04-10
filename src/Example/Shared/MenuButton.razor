@@ -1,0 +1,8 @@
+﻿<button class="btn btn-primary" onclick="@($"let el = document.getElementById('{Identifier}-example'); el.scrollIntoView({{behavior:'smooth'}}); el.classList.add('bg-warning'); setTimeout(() => el.classList.remove('bg-warning'), 3500);")">
+    @Name
+</button>
+
+@code {
+    [Parameter, EditorRequired] public required string Identifier { get; set; }
+    [Parameter, EditorRequired] public required string Name { get; set; }
+}
