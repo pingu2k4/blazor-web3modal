@@ -59,15 +59,14 @@ jobs:
           - name: Publish Project
             run: dotnet publish src/Example/Example.csproj -c Release -o release --nologo
 
-          - name: copy index.html to 404.html
-            run: cp src/Example/bin/Release/net7.0/wwwroot/index.html src/Example/bin/Release/net7.0/wwwroot/404.html
+          #- name: copy index.html to 404.html
+          #  run: cp src/Example/bin/Release/net7.0/wwwroot/index.html src/Example/bin/Release/net7.0/wwwroot/404.html
 
           - name: Add .nojekyll file
             run: touch src/Example/bin/Release/net7.0/wwwroot/.nojekyll
 
           - name: Commit wwwroot to GitHub Pages
-            uses: JamesIves/github-pages-deploy-action@3.7.1
+            uses: JamesIves/github-pages-deploy-action@v4
             with:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 BRANCH: gh-pages
                 FOLDER: src/Example/bin/Release/net7.0/wwwroot
