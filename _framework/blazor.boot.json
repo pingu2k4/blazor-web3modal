@@ -8,7 +8,7 @@
   "resources": {
     "assembly": {
       "Blazor-Web3Modal.dll": "sha256-W4EcG2WdTeeXjAR2enm5SevcWP\/e\/ivvSDaQp+1SiYI=",
-      "Example.dll": "sha256-CNoqM8csOkzNQACkjClX1NEmPp+KIuZERfnAEq3ObcM=",
+      "Example.dll": "sha256-om9aqQuUr7kzt1Iv9DA7FGXrikPJlEP1Ei3mcCVAAqE=",
       "Microsoft.AspNetCore.Components.dll": "sha256-eKZarXeT5qxTlHEflI76OoHO+9o6AMBCSEifuw6mCDg=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-Ggd4ASTBFCJSw4gixv0hhWkXwNo2dL\/c2j8an3rKga0=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-bgfp372i1DPkfku44hS7mKHImwVcSaxAgF7Nibkt0UY=",
