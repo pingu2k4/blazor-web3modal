@@ -69,7 +69,9 @@ jobs:
       run: touch src/Example/bin/Release/net7.0/publish/wwwroot/.nojekyll
 
     - name: Removing .gitignore so that we get js pushed to GH Pages
-      run: rm ./.gitignore
+      run: |
+        rm .gitignore
+        echo "$(ls)"
 
     - name: Commit wwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
