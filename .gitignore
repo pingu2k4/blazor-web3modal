@@ -544,3 +544,5 @@ DB/
 **/infer-out/**
 /src/Blazor-Web3Modal/wwwroot/index.bundle.js
 /src/Blazor-Web3Modal/wwwroot/index.bundle.js.map
+/src/Blazor-Web3Modal/wwwroot/index.bundle.js
+/src/Blazor-Web3Modal/wwwroot/index.bundle.js.map
