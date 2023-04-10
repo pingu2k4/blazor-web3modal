@@ -30,7 +30,7 @@ jobs:
           echo Version: $VERSION
           VERSION="${VERSION:1}"
           echo Clean Version: $VERSION
-          dotnet build --configuration Release src\Blazor-Web3Modal\Blazor-Web3Modal.csproj
+          dotnet build --configuration Release src/Blazor-Web3Modal/Blazor-Web3Modal.csproj
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg --no-build src/Blazor-Web3Modal/Blazor-Web3Modal.csproj
 
     - name: Push to NuGet Feed
