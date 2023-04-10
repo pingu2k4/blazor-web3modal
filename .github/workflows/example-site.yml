@@ -57,16 +57,20 @@ jobs:
                 dotnet-version: ${{ env.DOTNET_VERSION }}
 
           - name: Publish Project
-            run: dotnet publish src/Example/Example.csproj -c Release -o release --nologo
+            run: dotnet publish src/Example/Example.csproj -c Release --nologo
 
-          #- name: copy index.html to 404.html
-          #  run: cp src/Example/bin/Release/net7.0/wwwroot/index.html src/Example/bin/Release/net7.0/wwwroot/404.html
+          - name: Change base tag
+            run: sed -i 's/<base href="\/" \/>/<base href="\/blazor-web3modal\/" \.>/g' src/Example/bin/Release/net7.0/publish/wwwroot/index.html
+
+          - name: copy index.html to 404.html
+            run: cp src/Example/bin/Release/net7.0/publish/wwwroot/index.html src/Example/bin/Release/net7.0/publish/wwwroot/404.html
 
           - name: Add .nojekyll file
-            run: touch src/Example/bin/Release/net7.0/wwwroot/.nojekyll
+            run: touch src/Example/bin/Release/net7.0/publish/wwwroot/.nojekyll
 
           - name: Commit wwwroot to GitHub Pages
             uses: JamesIves/github-pages-deploy-action@v4
             with:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 BRANCH: gh-pages
-                FOLDER: src/Example/bin/Release/net7.0/wwwroot
+                FOLDER: src/Example/bin/Release/net7.0/publish/wwwroot
