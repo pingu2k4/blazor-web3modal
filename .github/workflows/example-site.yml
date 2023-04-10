@@ -20,7 +20,7 @@ jobs:
         outputs:
             changes-detected: ${{ steps.filter.outputs.changes }}
         steps:
-          - uses: actions/checkout@V2
+          - uses: actions/checkout@v2
             name: Checkout
             with:
                 ref: ${{ env.BRANCH }}
@@ -42,9 +42,11 @@ jobs:
                 info: ${{ steps.filter.outputs.changes_count }} changes - ${{ steps.filter.outputs.changes }}
 
     deploy-to-github-pages:
+        needs: changes
+        if: ${{ !failure() && (github.event_name == 'workflow_dispatch') || needs.changes.outputs.changes-detected == 'true' }}
         runs-on: ubuntu-latest
         steps:
-          - uses: actions/checkout@V2
+          - uses: actions/checkout@v2
             name: Checkout
             with:
                 ref: ${{ env.BRANCH }}
