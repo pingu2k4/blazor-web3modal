@@ -293,7 +293,7 @@ export async function configure(options, dotNetInterop) {
 
   const wagmiClient = createClient({
     autoConnect: autoConnect,
-    connectors: w3mConnectors({projectId, version: 1, convertedChains}),
+    connectors: w3mConnectors({projectId, version: 2, convertedChains}),
     provider
   });
 

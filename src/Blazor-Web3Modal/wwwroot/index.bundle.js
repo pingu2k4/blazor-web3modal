@@ -63587,7 +63587,7 @@ async function configure(options, dotNetInterop) {
   const { provider } = configureChains(convertedChains, [P9({ projectId })]);
   const wagmiClient = createClient({
     autoConnect,
-    connectors: j7({ projectId, version: 1, convertedChains }),
+    connectors: j7({ projectId, version: 2, convertedChains }),
     provider
   });
   ethereumClient = new A9(wagmiClient, convertedChains);
