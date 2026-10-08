@@ -11,12 +11,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "esbuild": "^0.17.14",
+    "esbuild": "^0.28.1",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@wagmi/core": "^0.10.7",
+    "@wagmi/core": "^3.6.5",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/html": "^2.2.2"
   }
