@@ -8,6 +8,7 @@
 	
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>Blazor-Web3Modal</PackageId>
+	<PackageIcon>icon.png</PackageIcon>
     <Authors>Pingu</Authors>
     <Description>A library to provide simple interop access to Web3Modal in Blazor applications</Description>
     <Copyright>Copyright 2023 (c) Pingu. All rights reserved.</Copyright>
@@ -35,4 +36,7 @@
 		<Exec Command="npm run build" WorkingDirectory="Npm" Condition="'$(Configuration)' == 'Release'" />
 	</Target>
 
+  <ItemGroup>
+    <None Update="icon.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>
